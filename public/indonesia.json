@@ -1,0 +1,16 @@
+{
+    "sSearch"       :"<i class='fa fa-search fa-fw'></i> Cari: ",
+    "sLengthMenu"   :"Tampilkan _MENU_ data", 
+    "sInfo"         :"Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+    "sInfoFiltered" :"(disaring dari _MAX_ total data)", 
+    "sZeroRecords"  :"Oops..data kosong", 
+    "sEmptyTable"   :"Data kosong.", 
+    "sInfoEmpty"    :"Menampilkan 0 sampai 0 data",
+    "sProcessing"   :"Sedang memproses...", 
+    "oPaginate": {
+        "sPrevious" :"Sebelumnya",
+        "sNext"     :"Selanjutnya",
+        "sFirst"    :"Pertama",
+        "sLast"     :"Terakhir"
+    }
+}
