@@ -3,13 +3,16 @@
 namespace App\Repositories\Manufactures;
 
 use App\Model\Manufacture;
+use App\Model\Product;
 
 class EloquentManufacturesRepository implements ManufacturesRepository{
 
     private $manufacture;
+    private $product;
 
-    function  __construct(Manufacture $manufacture){
+    function  __construct(Manufacture $manufacture, Product $product){
         $this->manufacture = $manufacture;
+        $this->product = $product;
     }
 
     public function pagingAllMaufactures(){
@@ -67,9 +70,12 @@ class EloquentManufacturesRepository implements ManufacturesRepository{
     }
 
     public function deleteManufacture($id){
+        $product_check = $this->product->where('manufacture_id',$id)->get();
+        if($product_check->count() > 0)
+            return $product_check->count();
         $data = $this->manufacture->find($id);
         $data->delete();
         if($data)
-            return $data;
+            return 0;
     }
 }

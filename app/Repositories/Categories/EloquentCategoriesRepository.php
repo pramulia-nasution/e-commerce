@@ -3,6 +3,7 @@
 namespace App\Repositories\Categories;
 
 use App\Model\Category;
+use DB;
 
 class EloquentCategoriesRepository implements CategoriesRepository{
 
@@ -67,10 +68,13 @@ class EloquentCategoriesRepository implements CategoriesRepository{
     }
 
     public function deleteCategory($id){
+        $product_check = DB::table('category_product')->where('category_id',$id)->get();
+        if($product_check->count() > 0)
+            return $product_check->count();
         $data = $this->category->find($id);
         $data->delete();
         if($data)
-            return $data;
+            return 0;
     }
 
     public function recursiveCategories($id = 0){

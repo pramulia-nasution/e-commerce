@@ -137,8 +137,6 @@
                     Swal.showLoading()
                   },
                   success:function(res){
-                    console.log(res)
-                    //location.reload()
                     msg('success','Data telah berhasil dihapus')
                   },
                   error:function(jqXHR, textStatus, errorThrown){
@@ -202,11 +200,15 @@
                   url: route,
                   type:"DELETE",
                   success:function(res){
+                    if(res.data > 0){
+                      msg('info', res.params+' tersebut masih terhubung dengan produk, tidak dapat dihapus')
+                    }else{
                       tabel.ajax.reload();
-                      msg('success','Data telah berhasil dihapus')
+                      msg('success','data telah berhasil dihapus')
+                    }
                   },
                   error:function(jqXHR, textStatus, errorThrown){
-                      msg('error','Data gagal dihapus')
+                      msg('error','Data gagal dihapus internal server error')
                   }
               });
           }

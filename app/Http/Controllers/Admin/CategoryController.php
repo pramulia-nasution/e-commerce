@@ -119,7 +119,7 @@ class CategoryController extends Controller
     {
         $category = $this->category->deleteCategory($id);
         if($category)
-            return response()->json(['status' => true],200);
+            return response()->json(['params'=>'Kategori','data' => $category],200);
     }
 
     private function childCat($childs,$i,$parent){

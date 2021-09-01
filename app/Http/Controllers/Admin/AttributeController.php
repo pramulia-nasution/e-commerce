@@ -58,7 +58,7 @@ class AttributeController extends Controller
     public function destroy($id){
         $atribut = $this->attribute->deleteAttribute($id);
         if($atribut)
-            return response()->json(['status' => true],200);
+            return response()->json(['params'=>'Nilai atribut','data' => $atribut],200);
     }
 
     public function storeValue(){
@@ -76,6 +76,6 @@ class AttributeController extends Controller
     public function destroyValue($id){
         $value = $this->attribute->deleteValue($id);
         if($value)
-            return response()->json(['status' => true],200);
+            return response()->json(['params'=>'Nilai','data' => $value],200);
     }
 }

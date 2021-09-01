@@ -2,15 +2,18 @@
 
 namespace App\Repositories\Attributes;
 
+use App\Model\OptionProduct;
 use App\Model\Attribute;
 use App\Model\Option;
 
 class EloquentAttributesRepository implements AttributesRepository{
 
+    private $option_product;
     private $attribute;
     private $option;
 
-    function  __construct(Attribute $attribute, Option $option){
+    function  __construct(Attribute $attribute, Option $option, OptionProduct $option_product){
+        $this->option_product = $option_product;
         $this->attribute = $attribute;
         $this->option = $option;
     }
@@ -42,10 +45,16 @@ class EloquentAttributesRepository implements AttributesRepository{
 
     public function deleteAttribute($id){
         $data = $this->attribute->find($id);
-        $this->option->where('attribute_id',$id)->delete();
+        $option = $this->option->where('attribute_id',$id);
+        foreach($option->get() as $item){
+            $product_check = $this->option_product->where('option_id',$item->id)->get();
+            if($product_check->count() > 0)
+                return $product_check->count();
+        }
+        $option->delete();
         $data->delete();
         if($data)
-            return $data;
+            return 0;
     }
 
     public function ChangeAttributes($data){
@@ -64,9 +73,12 @@ class EloquentAttributesRepository implements AttributesRepository{
     }
 
     public function deleteValue($id){
+        $product_check = $this->option_product->where('option_id',$id)->get();
+        if($product_check->count() > 0)
+            return $product_check->count();
         $data = $this->option->find($id);
         $data->delete();
         if($data)
-            return $data;
+            return 0;
     }
 }

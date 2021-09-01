@@ -78,6 +78,6 @@ class ManufactureController extends Controller
     public function destroy($id){
         $manufacture = $this->manufacture->deleteManufacture($id);
         if($manufacture)
-            return response()->json(['status'=>true],200);
+            return response()->json(['params'=>'Brand','data' => $manufacture],200);
     }
 }
