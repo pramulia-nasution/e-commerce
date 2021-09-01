@@ -106,7 +106,6 @@
             $('#form-body').empty();
             $.get("{{URL::to('admin/katalog/product-option')}}/"+id,function(res){
                 let data = res.data
-                console.log(data)
                 let vHtml = '';
                 $.each(data,function(key, data){
                     vHtml += '<div class="form-group"><label class="control-label">'+data.value+'</label>';

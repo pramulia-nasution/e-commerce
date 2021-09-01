@@ -14,6 +14,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' =>'admin.'],func
         Route::group(['prefix' => 'image', 'as' => 'gambar.'],function (){
             Route::get('/','ImageController@index')->name('index');
             Route::post('/','ImageController@store')->name('store');
+            Route::get('/detail/{id}','ImageController@show')->name('show');
+            Route::post('delete','ImageController@destroy')->name('destroy');
+            Route::post('regenerate','ImageController@regenerate')->name('generate');
             Route::get('settings','ImageController@settings')->name('settings');
             Route::get('size','ImageController@getSizeImage')->name('size');
             Route::post('size','ImageController@postSizeImage')->name('size');
@@ -32,6 +35,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' =>'admin.'],func
             Route::get('product-option/{id}','ProductController@option_product');
             Route::post('update-option','ProductController@option_update');
             Route::get('product/{id}/images','ProductController@product_image');
+            Route::get('load-images/{id}','ProductController@load_images');
+            Route::post('insert-images','ProductController@insert_image');
+            Route::delete('load-images/{id}','ProductController@delete_image');
             Route::resource('coupon','CouponController')->except('show');
         });
         Route::get('logout', 'AuthController@logout')->name('logout');

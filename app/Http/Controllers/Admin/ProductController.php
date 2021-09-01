@@ -185,10 +185,28 @@ class ProductController extends Controller
     public function product_image($id){
         $header = [
             'title' => 'Gambar Produk',
-            'desc'  => 'Edit Produk',
+            'desc'  => 'Koleksi gambar produk',
             'icon'  => 'fa-picture-o'
         ];
         $images = $this->image->getAllThumbnails();
-        return view('admin.product.images',$header)->with(['images' => $images]);
+        return view('admin.product.images',$header)->with(['images' => $images,'id'=>$id]);
+    }
+
+    public function load_images($id){
+        $imagesProduct = $this->product->imagesProduct($id,'THUMBNAIL')->get();
+        if($imagesProduct)
+            return response()->json(['data' => $imagesProduct],200);
+    }
+
+    public function insert_image(){
+        $image = $this->product->insertImage(request());
+        if($image)
+            return response()->json(['data' => $image],200);
+    }
+
+    public function delete_image($id){
+        $images = $this->product->deleteImages($id);
+        if($images)
+            return response()->json(['data' => $images],200);
     }
 }

@@ -103,7 +103,6 @@
 
 <script src="/assets-admin/dist/js/adminlte.min.js"></script>
 
-<script src="/script/validate.js"></script>
 <script src="/script/common.js"></script>
 
 @yield('js')
@@ -118,6 +117,36 @@
             headers:{
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        })
+        $('#btn-delete').on('click',function (){
+          Swal.fire({
+              title: 'Yakin ingin hapus gambar yang di pilih?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Ya'
+            }).then((res)=>{
+              if(res.value){
+                $.ajax({
+                  url: "{{route('admin.gambar.destroy')}}",
+                  type:"POST",
+                  data: $('#images_form').serialize(),
+                  dataType: "JSON",
+                  beforeSend:function(){
+                    Swal.showLoading()
+                  },
+                  success:function(res){
+                    console.log(res)
+                    //location.reload()
+                    msg('success','Data telah berhasil dihapus')
+                  },
+                  error:function(jqXHR, textStatus, errorThrown){
+                    msg('error','Data gagal dihapus')
+                  }
+                });
+              }
+            });
         })
    })
    const Toast = Swal.mixin({

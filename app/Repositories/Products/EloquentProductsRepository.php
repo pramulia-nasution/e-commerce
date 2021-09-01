@@ -6,16 +6,18 @@ use App\Model\Product;
 use App\Model\Category;
 use App\Model\Deal;
 use App\Model\OptionProduct;
+use App\Model\ImageProduct;
 use DB;
 use Batch;
 
 class EloquentProductsRepository implements ProductsRepository{
 
 
-    function  __construct(Product $product, Category $category,Deal $deal){
+    function  __construct(Product $product, Category $category,Deal $deal, ImageProduct $image_products){
         $this->product = $product;
         $this->category = $category;
         $this->deal = $deal;
+        $this->image_products = $image_products;
     }
 
     public function pagingAllProducts(){
@@ -145,5 +147,32 @@ class EloquentProductsRepository implements ProductsRepository{
         }
         $update = Batch::update($option,$temp,$index);
         return $update;
+    }
+
+    public function imagesProduct($id,$type){
+        $images = $this->image_products->leftJoin('images_detail',function($join) use($type){
+            $join->on('images_detail.image_id', '=', 'image_products.image_id')
+                ->where(function ($query) use($type) {
+                    $query->where('images_detail.image_type', '=',$type);
+                });
+        })
+        ->where('product_id',$id)
+        ->select('image_products.id','images_detail.path');
+        return $images;
+    }
+
+    public function insertImage($data){
+        $newData = $this->image_products->create([
+            'image_id' => $data->image_id,
+            'product_id' => $data->product_id
+        ]);
+        return $newData;
+    }
+
+    public function deleteImages($id){
+        $images = $this->image_products->find($id);
+        $images->delete();
+        if($images)
+            return $images;
     }
 }

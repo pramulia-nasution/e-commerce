@@ -113,4 +113,27 @@ class ImageController extends Controller
         $this->image->imageRecord($filename, $path, $width, $height, $type);
         return;
     }
+
+    public function show($id){
+        $header = [
+            'title' => 'Gambar',
+            'desc'  => 'Detail gambar',
+            'icon'  => 'fa-picture-o'
+        ];
+        $images = $this->image->detailImage($id);
+        return view('admin.image.show',$header)->with(['images' => $images]);
+    }
+
+    public function regenerate(Request $request){
+        $images = $this->image->regenerate($request);
+        if ($images)
+            return redirect()->back()->with('success','Ukuran gambar berhasil diubah');
+        return redirect()->back()->with('error','ukuran gambar gagal diubah');
+    }
+
+    public function destroy(Request $request){
+        $images = $this->image->deleteImages($request);
+        if($images)
+            return response()->json(['data' => $images],200);
+    }
 }

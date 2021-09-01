@@ -12,18 +12,78 @@
                 <button type="button" data-toggle="modal" data-target="#modal-form" class="btn btn-info">Tambah Gambar</button>
             </div>
             <div class="row">
-                <div class="col-xs-4 col-md-2 margin-bottomset">
-                    <div class="thumbnail">
-                        <div class="caption">
-                          <a class="badge bg-light-blue editProductImagesModal" href="https://jualkom.com/admin/products/images/editproductimage/32"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                          <a products_id="32" id="32" class="badge bg-red deleteProductImagesModal"><i class="fa fa-trash " aria-hidden="true"></i></a>
-                        </div>
-                        <img  src="https://jualkom.com/images/media/2021/04/E7yq328508.jpg" alt="..." class="hover">
-                         Sort Order : 1
-                    </div>
-                </div>
+                <div id="load-images"></div>
             </div>
         </x-box>
     </div>
     @include('admin.partials.modal-images')
+@endsection
+
+@section('js')
+    <script>
+        var id = '{{$id}}';
+        $(function (){
+            loadImages()
+        })
+                $(document).on('click','#select-image',function (){
+                let image_id = $('.thumbnail.selected').children('img').attr('alt');
+                $.ajax({
+                    url: "{{URL::to('admin/katalog/insert-images')}}",
+                    data: {
+                        product_id: id,
+                        image_id: image_id
+                    },
+                    type: "POST",
+                    dataType: "JSON",
+                    beforeSend:function(){
+                        Swal.showLoading()
+                    },
+                    success:function(res){
+                    loadImages()
+                    msg('success','Gambar telah ditambahkan')
+                    },
+                    error:function(jqXHR, textStatus, errorThrown){
+                        msg('error','Gambar gagal ditambahkan')
+                    }
+                })
+            })
+    function loadImages(){
+        $('#load-images').empty();
+        $.get("{{URL::to('admin/katalog/load-images')}}/"+id,function(res){
+            let data = res.data
+            let vHtml ='';
+            $.each(data,function(key,value){
+                vHtml += '<div class="col-xs-4 col-md-2 margin-bottomset"><div class="thumbnail"><div class="caption pull-right">';
+                vHtml += '<a class="badge bg-red"  onclick="deleteImage('+value.id+')"><i class="fa fa-trash " aria-hidden="true"></i></a></div>';
+                vHtml += '<img  src="/'+value.path+'" alt="..." class="hover"></div></div>';
+            })
+            $('#load-images').append(vHtml)
+        })
+    }
+
+    function deleteImage(param){
+        Swal.fire({
+          title: 'Yakin ingin hapus gambar?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Ya'
+      }).then((res)=>{
+          if(res.value){
+              $.ajax({
+                  url: "{{URL::to('admin/katalog/load-images')}}/"+param,
+                  type:"DELETE",
+                  success:function(res){
+                    loadImages()
+                    msg('success','Gambar telah dihapus')
+                  },
+                  error:function(jqXHR, textStatus, errorThrown){
+                      msg('error','Gambar gagal dihapus')
+                  }
+              });
+          }
+      });
+    }
+    </script>
 @endsection

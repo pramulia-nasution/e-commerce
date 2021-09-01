@@ -23,16 +23,20 @@
         <x-box class="box-info" title="{{$desc}}">
             <div style="margin-bottom: 20px;">
                 <button data-toggle="modal" data-target="#modal-form" class="btn btn-info"><i class="fa fa-plus"></i> Tambah</button>
+                <button type="button" id="btn-delete" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</button>
                 <a href="{{route('admin.gambar.index')}}"  class="btn btn-warning"><i class="fa fa-refresh"></i> Reload</a>
             </div>
             <div class="row">
+                <form class="hidden" id="images_form">
+                    <input id="images" type="hidden" name="images">
+                </form>
                 @if(isset($images))
                     @foreach($images as $image)
                     <div class="col-xs-4 col-md-2 margin-bottomset">
                         <div class="thumbnail thumbnail-imges">
                             <img class="test_image" image_id="{{$image->image_id}}" src="{{asset($image->path)}}" alt="...">
                         </div>
-                        <a class="btn btn-block btn-primary" href="{{url('admin/media/detail')}}/{{$image->image_id}}"> Detail Gambar</a>
+                        <a class="btn btn-block btn-primary" href="{{url('admin/image/detail/')}}/{{$image->image_id}}"> Detail Gambar</a>
                     </div>
                     @endforeach
                 @endif

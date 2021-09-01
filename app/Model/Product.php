@@ -17,10 +17,6 @@ class Product extends Model
         return $this->hasOne(ImagesDetail::class,'image_id','image_id');
     }
 
-    public function images(){
-        return $this->hasMany(Image::class);
-    }
-
     public function manufacture(){
         return $this->belongsTo(Manufacture::class);
     }
