@@ -17,6 +17,8 @@ use App\Repositories\Products\ProductsRepository;
 use App\Repositories\Products\EloquentProductsRepository;
 use App\Repositories\Coupons\CouponsRepository;
 use App\Repositories\Coupons\EloquentCouponsRepository;
+use App\Repositories\Inventories\InventoriesRepository;
+use App\Repositories\Inventories\EloquentInventoriesRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AttributesRepository::class, EloquentAttributesRepository::class);
         $this->app->bind(ProductsRepository::class, EloquentProductsRepository::class);
         $this->app->bind(CouponsRepository::class, EloquentCouponsRepository::class);
+        $this->app->bind(InventoriesRepository::class, EloquentInventoriesRepository::class);
     }
 
     /**

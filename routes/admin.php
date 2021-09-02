@@ -39,6 +39,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' =>'admin.'],func
             Route::post('insert-images','ProductController@insert_image');
             Route::delete('load-images/{id}','ProductController@delete_image');
             Route::resource('coupon','CouponController')->except('show');
+            Route::resource('inventory','InventoryController');
         });
         Route::get('logout', 'AuthController@logout')->name('logout');
     });

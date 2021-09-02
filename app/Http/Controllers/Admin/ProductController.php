@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\ProductService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Images\ImagesRepository;
 use App\Repositories\Products\ProductsRepository;
-use App\Repositories\Categories\CategoriesRepository;
 use App\Repositories\Attributes\AttributesRepository;
 use App\Repositories\Manufactures\ManufacturesRepository;
 
-class ProductController extends Controller
-{
-    function __construct(ManufacturesRepository $manufacture, CategoriesRepository $category, ImagesRepository $image, AttributesRepository $attribute, ProductsRepository $product){
+class ProductController extends Controller{
+
+    function __construct(ManufacturesRepository $manufacture, ImagesRepository $image, AttributesRepository $attribute, ProductsRepository $product, ProductService $productService ){
+        $this->productService = $productService;
         $this->product = $product;
         $this->manufacture = $manufacture;
-        $this->category = $category;
         $this->image = $image;
         $this->attribute = $attribute;
     }
@@ -50,9 +50,6 @@ class ProductController extends Controller
                 else
                     return $item->name;
             })
-            ->editColumn('weight',function ($item){
-                return $item->weight.' gr';
-            })
             ->addColumn('action',function($item){
                 $plus = '';
                 if($item->type == '1')
@@ -74,49 +71,11 @@ class ProductController extends Controller
             'desc'  => 'Tambah Produk',
             'icon'  => 'fa-cubes'
         ];
-        $manufactures = $this->manufacture->getAllManufactures();
-        $attibutes = $this->attribute->pagingAllAttributes()->get();
-        $categories = $this->category->recursiveCategories();
-        $parent_id = array();
-        $option = '<ul class="list-group list-group-root well">';
-        foreach ($categories as $parents) {
-            if (in_array($parents->id, $parent_id))
-                $checked = 'checked';
-            else
-                $checked = '';
-            $option .= '<li href="#" class="list-group-item"><label style="width:100%">
-            <input id="categories_' . $parents->id . '" ' . $checked . ' type="checkbox" class=" required_one categories sub_categories" name="categories[]" value="' . $parents->id . '">
-          ' . $parents->name . '</label></li>';
-
-            if (isset($parents->childs)) {
-                $option .= '<ul class="list-group"><li class="list-group-item">';
-                $option .= $this->childcat($parents->childs, $parent_id);
-                $option .= '</li></ul>';
-            }
-        }
-        $option .= '</ul>';
-        $result['categories'] = $option;
-        $result['manufactures'] = $manufactures;
-        $result['attributes'] = $attibutes;
+        $result['categories'] = $this->productService->htmlCategory();
+        $result['manufactures'] = $this->manufacture->getAllManufactures();
+        $result['attributes'] = $this->attribute->pagingAllAttributes()->get();
         $images = $this->image->getAllThumbnails();
         return view('admin.product.create',$header)->with(['result'=> $result, 'images' => $images]);
-    }
-
-    public function childcat($childs, $parent_id){
-        $contents = '';
-        foreach ($childs as $key => $child) {
-            if (in_array($child->id, $parent_id))
-                $checked = 'checked';
-            else
-                $checked = '';
-            $contents .= '<label> <input id="categories_' . $child->id . '" parents_id="' . $child->parent_id . '"  type="checkbox" name="categories[]" class="required_one sub_categories categories sub_categories_' . $child->parent_id . '" value="' . $child->id . '" ' . $checked . '> ' . $child->name . '</label>';
-            if (isset($child->childs)) {
-                $contents .= '<ul class="list-group"><li class="list-group-item">';
-                $contents .= $this->childcat($child->childs, $parent_id);
-                $contents .= "</li></ul>";
-            }
-        }
-        return $contents;
     }
 
     public function store(ProductRequest $request){
@@ -133,28 +92,11 @@ class ProductController extends Controller
         ];
         $product = $this->product->editProduct($id);
         $images = $this->image->getAllThumbnails();
-        $categories = $this->category->recursiveCategories();
         $parent_id = $product->categories->pluck('id')->toArray();
-        $option = '<ul class="list-group list-group-root well">';
-        foreach ($categories as $parents) {
-            if (in_array($parents->id, $parent_id))
-                $checked = 'checked';
-            else
-                $checked = '';
-            $option .= '<li href="#" class="list-group-item"><label style="width:100%">
-            <input id="categories_' . $parents->id . '" ' . $checked . ' type="checkbox" class=" required_one categories sub_categories" name="categories[]" value="' . $parents->id . '">
-          ' . $parents->name . '</label></li>';
-            if (isset($parents->childs)) {
-                $option .= '<ul class="list-group"><li class="list-group-item">';
-                $option .= $this->childcat($parents->childs, $parent_id);
-                $option .= '</li></ul>';
-            }
-        }
-        $option .= '</ul>';
         $result['manufactures'] = $this->manufacture->getAllManufactures();;
         $result['attributes'] = $this->attribute->pagingAllAttributes()->get();;
         $result['option_product'] = $product->options->pluck('id')->toArray();
-        $result['categories'] = $option;
+        $result['categories'] = $this->productService->htmlCategory($parent_id);
         return view('admin.product.edit',$header)->with(['result'=> $result, 'images' => $images, 'product' => $product]);
     }
 

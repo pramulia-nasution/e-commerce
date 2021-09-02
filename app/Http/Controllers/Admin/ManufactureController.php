@@ -8,8 +8,7 @@ use App\Http\Requests\ManufacutureRequest;
 use App\Repositories\Images\ImagesRepository;
 use App\Repositories\Manufactures\ManufacturesRepository;
 
-class ManufactureController extends Controller
-{
+class ManufactureController extends Controller{
     public $manufacture;
 
     function __construct(ManufacturesRepository $manufacture, ImagesRepository $image){
@@ -17,8 +16,7 @@ class ManufactureController extends Controller
         $this->image = $image;
     }
 
-    public function index()
-    {
+    public function index(){
         $header = [
             'title' => 'Brand',
             'desc'  => 'Daftar Brand',
@@ -40,8 +38,7 @@ class ManufactureController extends Controller
         return view('admin.manufacture.index',$header);
     }
 
-    public function create()
-    {
+    public function create(){
         $header = [
             'title' => 'Brand',
             'desc'  => 'Tambah Brand',
@@ -51,8 +48,7 @@ class ManufactureController extends Controller
         return view('admin.manufacture.create',$header)->with('images',$images);
     }
 
-    public function store(ManufacutureRequest $request)
-    {
+    public function store(ManufacutureRequest $request){
         $newData = $this->manufacture->insertManufacture($request);
             return redirect()->route('admin.manufacture.index')->with('success','Brand baru berhasil ditambahkan');
         return redirect()->route('admin.manufacture.index')->with('error','Terjadi kesalahan saat input Brand baru');

@@ -40,6 +40,7 @@
             <li class="{{active('admin/katalog/category')}} {{active('admin/katalog/category/*')}}"><a href="{{route('admin.category.index')}}"><i class="fa fa-circle-o"></i> Kategori</a></li>
             <li class="{{active('admin/katalog/attribute')}} {{active('admin/katalog/attribute/*')}}"><a href="{{route('admin.attribute.index')}}"><i class="fa fa-circle-o"></i> Atribut Produk</a></li>
             <li class="{{active('admin/katalog/product')}} {{active('admin/katalog/product/*')}}"><a href="{{route('admin.product.index')}}"><i class="fa fa-circle-o"></i> Produk</a></li>
+            <li class="{{active('admin/katalog/inventory')}} {{active('admin/katalog/inventory/*')}}"><a href="{{route('admin.inventory.index')}}"><i class="fa fa-circle-o"></i> Stok Produk</a></li>
             <li class="{{active('admin/katalog/coupon')}} {{active('admin/katalog/coupon/*')}}"><a href="{{route('admin.coupon.index')}}"><i class="fa fa-circle-o"></i> Kupon</a></li>
           </ul>
         </li>

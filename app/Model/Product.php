@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name','slug','description','image_id','manufacture_id','type','status','is_feature','weight','price','link','model'];
+    protected $fillable = ['name','slug','description','image_id','manufacture_id','kind','type','status','is_feature','weight','price','link','model'];
 
     public function setSlugAttribute($value){
         $this->attributes['slug'] = Str::slug($value,'-');
@@ -31,5 +31,9 @@ class Product extends Model
 
     public function deal(){
         return $this->hasOne(Deal::class);
+    }
+
+    public function inventory(){
+        return $this->hasOne(Inventory::class);
     }
 }

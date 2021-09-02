@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddParentIdToCategoriesTable extends Migration
+class CreateHistoryInventoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddParentIdToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->integer('parent_id')->default(0)->after('status');
+        Schema::create('history_inventory', function (Blueprint $table) {
+            $table->id();
+            $table->integer('product_id');
+            $table->integer('value');
+            $table->enum('type',['in','out']);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddParentIdToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('parent_id');
-        });
+        Schema::dropIfExists('history_inventory');
     }
 }

@@ -7,8 +7,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller{
     use AuthenticatesUsers;
     
     protected $maxAttempts = 3;

@@ -2,20 +2,22 @@
 
 namespace App\Repositories\Products;
 
-use App\Model\Product;
-use App\Model\Category;
-use App\Model\Deal;
-use App\Model\OptionProduct;
-use App\Model\ImageProduct;
 use DB;
 use Batch;
+use App\Model\Deal;
+use App\Model\Product;
+use App\Model\Category;
+use App\Model\ImageProduct;
+use App\Model\Inventory;
+use App\Model\OptionProduct;
+
 
 class EloquentProductsRepository implements ProductsRepository{
 
 
     function  __construct(Product $product, Category $category,Deal $deal, ImageProduct $image_products){
         $this->product = $product;
-        $this->category = $category;
+        //$this->category = $category;
         $this->deal = $deal;
         $this->image_products = $image_products;
     }
@@ -42,9 +44,11 @@ class EloquentProductsRepository implements ProductsRepository{
                 'image_id' => $data->image_id,
                 'is_feature' => $data->is_feature,
                 'status' => $data->status,
+                'kind' => $data->kind,
                 'weight' => $data->weight,
                 'type' => $data->attribute
             ]);
+            $newData->inventory()->create();
             $newData->categories()->attach($data->categories);
             if($data->attribute == '1')
                 $newData->options()->attach($data->value_attribute);
@@ -60,6 +64,7 @@ class EloquentProductsRepository implements ProductsRepository{
             DB::commit();
             return $newData;
         }catch(\Exception $e){
+            dd($e);
             DB::rollback();
         }
     }
@@ -86,7 +91,10 @@ class EloquentProductsRepository implements ProductsRepository{
             $update->image_id = $data->image_id;
             $update->is_feature = $data->is_feature;
             $update->status = $data->status;
+            $update->kind = $data->kind;
             $update->weight = $data->weight;
+            if($update->kind =='digital')
+                $update->weight = 0;
             $update->type = $data->attribute;
             $update->save();
 

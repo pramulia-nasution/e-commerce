@@ -30,7 +30,6 @@
                         <th>Kategori</th>
                         <th>Nama Produk</th>
                         <th>Harga</th>
-                        <th>Berat </th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </thead>
@@ -69,7 +68,6 @@
                     {data:'category',name:'products.categories',orderable:false,searchable:false},
                     {data:'name'},
                     {data:'price',render: $.fn.dataTable.render.number( '.', '.', 0, 'Rp. ' )},
-                    {data:'weight'},
                     {data:'status'},
                     {data:'action',orderable:false,searchable:false}
                 ]

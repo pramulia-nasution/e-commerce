@@ -98,6 +98,17 @@ $(document).on('click', '.sub_categories', function(){
 	}
 })
 
+//cek jenis produk
+$(document).on('change','#kind',function(){
+	if($(this).val() == 'digital'){
+		$(".container-weight").hide();
+		$(".container-weight #weight").removeClass("field-validate")
+	}else{
+		$(".container-weight").show();
+		$(".container-weight #weight").addClass("field-validate")
+	}
+})
+
 //validasi penawaran harga
 $(document).on('change','#deal',function(){
 	if($(this).val() == '0'){

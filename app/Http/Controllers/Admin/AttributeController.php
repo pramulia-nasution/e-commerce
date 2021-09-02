@@ -7,8 +7,7 @@ use App\Http\Requests\AttributeRequest;
 use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Attributes\AttributesRepository;
 
-class AttributeController extends Controller
-{
+class AttributeController extends Controller{
     public $attribute;
     function __construct(AttributesRepository $attribute){
         $this->attribute = $attribute;

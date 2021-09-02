@@ -68,6 +68,14 @@
                 <div class="row">
                     <div class="col-md-6 col-xs-12">
                         <div class="form-group">
+                            <label for="kind" class="control-label">Jenis Produk</label>
+                            <select id="kind" name="kind" class="form-control">
+                                <option value="physical">Produk Fisik</option>
+                                <option value="digital">Produk Digital</option>
+                            </select>
+                            <span class="help-block">pilih jenis produk yang akan anda tambahkan</span>
+                        </div>
+                        <div class="form-group">
                             <label for="price" class="control-label">Harga Produk<span style="color:red">*</span></label>
                             <input type="text" autocomplete="off" value="{{ old('price') }}" class="form-control field-validate" onkeypress="return err(this)" name="price">
                             <span class="help-block">input hanya berupa angka</span>
@@ -96,10 +104,12 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12">
-                        <div class="form-group">
-                            <label for="weight" class="control-label">Berat Produk<span style="color:red">*</span></label>
-                            <input type="text" autocomplete="off" class="form-control field-validate" onkeypress="return err(this)" value="{{ old('weight') }}" name="weight">
-                            <span class="help-block">input hanya berupa angka tanpa koma dalam satuan gr/gram</span>
+                        <div class="container-weight">
+                            <div class="form-group">
+                                <label for="weight" class="control-label">Berat Produk<span style="color:red">*</span></label>
+                                <input type="text" autocomplete="off" class="form-control field-validate" id="weight" value="0" onkeypress="return err(this)" value="{{ old('weight') }}" name="weight">
+                                <span class="help-block">input hanya berupa angka tanpa koma dalam satuan gr/gram</span>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="link" class="control-label">Link Video Produk</label>
@@ -112,6 +122,7 @@
                                 <option value="0">Tidak</option>
                                 <option value="1">Iya</option>
                             </select>
+                            <span class="help-block">Apakah produk tersebut termasuk unggulan atau tidak</span>
                         </div>
                         <div class="form-group">
                             <label for="status" class="control-label">Tipe Produk</label>

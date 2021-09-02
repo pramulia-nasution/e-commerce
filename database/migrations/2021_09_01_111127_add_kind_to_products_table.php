@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddParentIdToCategoriesTable extends Migration
+class AddKindToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddParentIdToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->integer('parent_id')->default(0)->after('status');
+        Schema::table('products', function (Blueprint $table) {
+            $table->enum('kind',['physical','digital'])->default('physical')->after('type');
         });
     }
 
@@ -25,8 +25,8 @@ class AddParentIdToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('parent_id');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('kind');
         });
     }
 }
