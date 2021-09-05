@@ -36,4 +36,8 @@ class Product extends Model
     public function inventory(){
         return $this->hasOne(Inventory::class);
     }
+
+    public function history_inventories(){
+        return $this->hasMany(HistoryInventory::class);
+    }
 }

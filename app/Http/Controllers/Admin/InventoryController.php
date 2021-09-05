@@ -30,11 +30,31 @@ class InventoryController extends Controller{
             })
             ->rawColumns(['status','action'])
             ->addColumn('action',function($item){
-                return '<a href="/admin/katalog/inventory/'.$item->id.'/show" style="color:white;cursor:pointer" class="btn btn-info btn-sm" title="History Stok"><i class="fa fa-file-text"></i></a> '.
-                '<a style="color:white;cursor:pointer" onclick="SetStock('.$item->id.',1)" class="btn btn-primary btn-sm" title="Update Stok"><i class="fa fa-refresh"></i></a>';
+                return '<a href="/admin/katalog/inventory/'.$item->product_id.'" style="color:white;cursor:pointer" class="btn btn-info btn-sm" title="History Stok"><i class="fa fa-file-text"></i></a> '.
+                '<a style="color:white;cursor:pointer" onclick="setStock('.$item->product_id.',1)" class="btn btn-success btn-sm" title="Update Stok"><i class="fa fa-refresh"></i></a>';
             })
             ->make(true);
         }
         return view('admin.inventory.index', $header);
+    }
+
+    public function store(){
+        $newData = $this->inventory->updateStock(request());
+        if($newData)
+            return response()->json($newData);
+    }
+
+    public function show($id){
+        $header = [
+            'title' => 'History Stok',
+            'desc'  => 'List History Stok',
+            'icon'  => 'fa-file-text',
+            'id' =>$id
+        ];
+        $this->inventory->history($id)->get();
+        if(request()->ajax()){
+
+        }
+        return view('admin.inventory.show',$header);
     }
 }

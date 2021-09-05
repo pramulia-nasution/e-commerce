@@ -48,7 +48,16 @@ class EloquentProductsRepository implements ProductsRepository{
                 'weight' => $data->weight,
                 'type' => $data->attribute
             ]);
-            $newData->inventory()->create();
+            $newData->inventory()->create([
+                'stock' => $data->stock,
+                'min_stock' => $data->min_stock
+            ]);
+            if($data->stock > 0){
+                $newData->history_inventories()->create([
+                    'value' => $data->stock,
+                    'type'  => 'in'
+                ]);
+            }
             $newData->categories()->attach($data->categories);
             if($data->attribute == '1')
                 $newData->options()->attach($data->value_attribute);
@@ -70,7 +79,7 @@ class EloquentProductsRepository implements ProductsRepository{
     }
 
     public function editProduct($id){
-        $product =  $this->product->with(['categories','deal','options','image' => function($query) {
+        $product =  $this->product->with(['categories','deal','inventory','options','image' => function($query) {
             $query->where('image_type','=','THUMBNAIL');
        }])
        ->find($id);
@@ -99,6 +108,9 @@ class EloquentProductsRepository implements ProductsRepository{
             $update->save();
 
             $update->categories()->sync($data->categories);
+            $update->inventory()->update([
+                'min_stock' => $data->min_stock
+            ]);
             if($data->attribute == '1')
                 $update->options()->sync($data->value_attribute);
             else

@@ -76,6 +76,16 @@
                             <span class="help-block">pilih jenis produk yang akan anda tambahkan</span>
                         </div>
                         <div class="form-group">
+                            <label for="stock" class="control-label">Stok Awal</label>
+                            <input type="text" autocomplete="off" value="{{ old('stock') ?? 0 }}" class="form-control" onkeypress="return err(this)" name="stock">
+                            <span class="help-block">input hanya berupa angka</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="min_stock" class="control-label">Minimum Stok</label>
+                            <input type="text" autocomplete="off" value="{{ old('min_stock') ?? 0 }}" class="form-control" onkeypress="return err(this)" name="min_stock">
+                            <span class="help-block">Notifikasi akan dikirimkan jika minimum stok dari produk ini tercapai</span>
+                        </div>
+                        <div class="form-group">
                             <label for="price" class="control-label">Harga Produk<span style="color:red">*</span></label>
                             <input type="text" autocomplete="off" value="{{ old('price') }}" class="form-control field-validate" onkeypress="return err(this)" name="price">
                             <span class="help-block">input hanya berupa angka</span>

@@ -13,6 +13,6 @@ class Inventory extends Model
     }
 
     public function getUpdatedAtAttribute(){
-        return Carbon::parse($this->attributes['updated_at'])->translatedFormat('l, d F Y');
+        return Carbon::parse($this->attributes['updated_at'])->translatedFormat('l, d F Y h:i:s A');
     }
 }
